@@ -1,5 +1,6 @@
 package com.lucasbandeira.clientes.service;
 
+import com.lucasbandeira.clientes.exception.EntityNotFoundException;
 import com.lucasbandeira.clientes.model.Cliente;
 import com.lucasbandeira.clientes.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,15 @@ public class ClienteService {
         return repository.save(cliente);
     }
 
-    public Optional <Cliente> obterPorId( Long id ) {
-        return repository.findById(id);
+    public Cliente obterPorId( Long id ) {
+        return repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Cliente com ID: "+ id + " não encontrado"));
     }
 
     public void deletarPorId( Long id ) {
-        repository.findById(id).ifPresent(cliente -> {
+        repository.findById(id).ifPresentOrElse(cliente -> {
             cliente.setAtivo(false);
             repository.save(cliente);
+        },()-> {throw new EntityNotFoundException("Cliente com ID: "+ id + " não encontrado");
         });
 
     }
@@ -33,12 +35,13 @@ public class ClienteService {
         repository.findById(id)
                 .ifPresentOrElse(
                         cliente -> atualizar(cliente,dadosAtualizados),
-                        ()->{throw new RuntimeException("Cliente com ID " + id + " não encontrado"); }
+                        ()->{throw new EntityNotFoundException("Cliente com ID " + id + " não encontrado"); }
                 );
     }
 
     private void atualizar(Cliente cliente, Cliente dadosAtualizados) {
         cliente.setNome(dadosAtualizados.getNome());
+        cliente.setCpf(dadosAtualizados.getCpf());
         cliente.setEmail(dadosAtualizados.getEmail());
         cliente.setTelefone(dadosAtualizados.getTelefone());
         repository.save(cliente);
