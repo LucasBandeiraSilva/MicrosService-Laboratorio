@@ -43,6 +43,6 @@ public class Cliente {
 
     @PrePersist
     private void prePersist() {
-        setAtivo(true);
+        this.ativo = true;
     }
 }
