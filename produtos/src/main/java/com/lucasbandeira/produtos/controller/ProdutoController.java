@@ -4,6 +4,7 @@ import com.lucasbandeira.produtos.mapper.ProdutoMapper;
 import com.lucasbandeira.produtos.model.Produto;
 import com.lucasbandeira.produtos.model.dto.ProdutoDTO;
 import com.lucasbandeira.produtos.service.ProdutoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar( @RequestBody ProdutoDTO produtoDTO ){
+    public ResponseEntity<Void> salvar( @Valid @RequestBody ProdutoDTO produtoDTO ){
         Produto produto = mapper.toEntity(produtoDTO);
         service.salvar(produto);
         URI location = getUri(produto.getId());
@@ -52,7 +53,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarExame(@PathVariable Long id, @RequestBody ProdutoDTO dadosAtualizados){
+    public ResponseEntity<Void> atualizarExame(@PathVariable Long id, @Valid @RequestBody ProdutoDTO dadosAtualizados){
         service.atualizarExame(id,dadosAtualizados);
         return ResponseEntity.noContent().build();
     }
