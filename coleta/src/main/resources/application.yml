@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mscoleta
+    name: mscoletas
   datasource:
     url: jdbc:mysql://localhost:3306/healthflow_coleta
     username: root
@@ -12,6 +12,15 @@ spring:
     properties:
       hibernate:
         format_sql:true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value} }
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
 
 server:
   port: 8082

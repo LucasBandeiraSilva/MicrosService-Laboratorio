@@ -18,7 +18,11 @@ public class CloudgatewayApplication {
 
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
-		return builder .routes() .route(route ->route.path("/clientes/**").uri("lb://msclientes")) .build();
+		return builder.routes()
+				.route(route ->route.path("/clientes/**").uri("lb://msclientes"))
+				.route(route -> route.path("/produtos/**").uri("lb://msprodutos"))
+				.route(route -> route.path("/coletas/**").uri("lb://coletas"))
+				.build();
 	}
 
 }
