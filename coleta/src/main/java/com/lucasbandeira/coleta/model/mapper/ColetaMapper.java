@@ -13,10 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface Coletamapper {
+public interface ColetaMapper {
 
     ItemColetaMapper ITEM_COLETA_MAPPER = Mappers.getMapper(ItemColetaMapper.class);
-
 
 
     @Mapping(source = "itens", target = "itens", qualifiedByName = "mapItens")
@@ -24,7 +23,9 @@ public interface Coletamapper {
 
     @Named("mapItens")
     default List <ItemColeta> mapItens( List <ItemColetaDTO> dtos ) {
-        return dtos.stream().map(ITEM_COLETA_MAPPER::toEntity).toList();
+        List <ItemColeta> coletas = dtos.stream().map(ITEM_COLETA_MAPPER::toEntity).toList();
+        System.out.println("coletas: " + coletas);
+        return coletas;
     }
 
     @AfterMapping
@@ -33,6 +34,9 @@ public interface Coletamapper {
         coleta.setDataPedido(LocalDateTime.now());
 
         var total = calcularTotal(coleta);
+
+        System.out.println("valor unitario: " + total);
+        System.out.println("total: " + total);
 
         coleta.setTotal(total);
 

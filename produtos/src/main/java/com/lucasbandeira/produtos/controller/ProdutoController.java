@@ -21,14 +21,18 @@ public class ProdutoController {
     private final ProdutoService service;
     private final ProdutoMapper mapper;
 
+    private static URI getUri( Long id ) {
+        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+    }
+
     @GetMapping
-    public ResponseEntity<List<ProdutoDTO>>listaProdutos(){
+    public ResponseEntity <List <ProdutoDTO>> listaProdutos() {
         List <ProdutoDTO> listaProdutos = service.listaProdutos();
         return ResponseEntity.ok(listaProdutos);
     }
 
     @PostMapping
-    public ResponseEntity<Void> salvar( @Valid @RequestBody ProdutoDTO produtoDTO ){
+    public ResponseEntity <Void> salvar( @Valid @RequestBody ProdutoDTO produtoDTO ) {
         Produto produto = mapper.toEntity(produtoDTO);
         service.salvar(produto);
         URI location = getUri(produto.getId());
@@ -38,29 +42,22 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> obterPorId(@PathVariable Long id){
+    public ResponseEntity <ProdutoDTO> obterPorId( @PathVariable Long id ) {
         Produto produto = service.obterPorId(id);
         ProdutoDTO produtoDTO = mapper.toDTO(produto);
         return ResponseEntity.ok(produtoDTO);
     }
 
-
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarExame(@PathVariable Long id){
+    public ResponseEntity <Void> deletarExame( @PathVariable Long id ) {
         service.deletarExame(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarExame(@PathVariable Long id, @Valid @RequestBody ProdutoDTO dadosAtualizados){
-        service.atualizarExame(id,dadosAtualizados);
+    public ResponseEntity <Void> atualizarExame( @PathVariable Long id, @Valid @RequestBody ProdutoDTO dadosAtualizados ) {
+        service.atualizarExame(id, dadosAtualizados);
         return ResponseEntity.noContent().build();
-    }
-
-
-    private static URI getUri(Long id) {
-        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
     }
 
 
