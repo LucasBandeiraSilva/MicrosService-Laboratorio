@@ -18,7 +18,6 @@ public class Produto {
 
     private BigDecimal valorUnitario;
 
-
     private boolean ativo;
 
     @PrePersist

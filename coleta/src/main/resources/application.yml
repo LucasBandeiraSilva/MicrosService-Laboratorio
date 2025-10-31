@@ -7,7 +7,7 @@ spring:
     password: root123
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: 'create-drop'
     show-sql: true
     properties:
       hibernate:
@@ -24,3 +24,12 @@ eureka:
 
 server:
   port: 8082
+
+
+healthflow:
+  coletas:
+    clients:
+      produtos:
+        url: 'http://localhost:8080/produtos'
+      clientes:
+        url: 'http://localhost:8080/clientes'

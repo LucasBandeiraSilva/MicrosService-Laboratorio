@@ -12,11 +12,13 @@ public class ItemColeta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codigo;
+    private Long id;
 
     @JoinColumn(name = "codigo_coleta")
     @ManyToOne
     private Coleta coleta;
+
+    private Long codigoProduto;
 
     private Integer quantidade;
 

@@ -3,7 +3,6 @@ package com.lucasbandeira.clientes.service;
 import com.lucasbandeira.clientes.exception.EntityNotFoundException;
 import com.lucasbandeira.clientes.model.Cliente;
 import com.lucasbandeira.clientes.model.dto.ClienteDTO;
-import com.lucasbandeira.clientes.model.dto.ClienteResponseDTO;
 import com.lucasbandeira.clientes.model.mapper.ClienteMapper;
 import com.lucasbandeira.clientes.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,37 +15,37 @@ public class ClienteService {
     private final ClienteRepository repository;
     private final ClienteMapper mapper;
 
-    public ClienteDTO salvar( ClienteDTO clienteDTO ) {
+    public Cliente salvar( ClienteDTO clienteDTO ) {
         Cliente cliente = mapper.toEntity(clienteDTO);
-        Cliente clienteSalvo = repository.save(cliente);
-        return mapper.toDTO(clienteSalvo);
+        return repository.save(cliente);
     }
 
-    public ClienteResponseDTO obterPorId( Long id ) {
-        Cliente cliente = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente com ID: " + id + " não encontrado"));
-        ClienteResponseDTO responseDTO = mapper.toResponseDTO(cliente);
-        return responseDTO;
-
+    public ClienteDTO obterPorId( Long id ) {
+        return repository.findById(id).map(cliente -> mapper.toDTO(cliente))
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID: " + id + " não encontrado"));
     }
 
     public void deletarPorId( Long id ) {
         repository.findById(id).ifPresentOrElse(cliente -> {
             cliente.setAtivo(false);
             repository.save(cliente);
-        },()-> {throw new EntityNotFoundException("Cliente com ID: "+ id + " não encontrado");
+        }, () -> {
+            throw new EntityNotFoundException("Cliente com ID: " + id + " não encontrado");
         });
 
     }
 
-    public void atualizarUsuario(Long id, ClienteDTO dadosAtualizados){
+    public void atualizarUsuario( Long id, ClienteDTO dadosAtualizados ) {
         repository.findById(id)
                 .ifPresentOrElse(
-                        cliente -> atualizar(cliente,dadosAtualizados),
-                        ()->{throw new EntityNotFoundException("Cliente com ID " + id + " não encontrado"); }
+                        cliente -> atualizar(cliente, dadosAtualizados),
+                        () -> {
+                            throw new EntityNotFoundException("Cliente com ID " + id + " não encontrado");
+                        }
                 );
     }
 
-    private void atualizar(Cliente cliente, ClienteDTO dadosAtualizados) {
+    private void atualizar( Cliente cliente, ClienteDTO dadosAtualizados ) {
         cliente.setNome(dadosAtualizados.getNome());
         cliente.setCpf(dadosAtualizados.getCpf());
         cliente.setEmail(dadosAtualizados.getEmail());

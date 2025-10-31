@@ -9,5 +9,4 @@ public class ItemColetaDTO {
     private Long codigoProduto;
     private Integer quantidade;
     private BigDecimal valorUnitario;
-
 }
