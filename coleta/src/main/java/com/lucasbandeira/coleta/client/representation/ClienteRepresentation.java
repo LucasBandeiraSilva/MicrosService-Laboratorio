@@ -11,5 +11,6 @@ public record ClienteRepresentation(
         LocalDate dataNascimento,
         String cpf,
         String telefone,
-        String email) {
+        String email,
+        boolean ativo) {
 }
