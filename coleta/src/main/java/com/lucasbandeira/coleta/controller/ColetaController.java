@@ -1,6 +1,7 @@
 package com.lucasbandeira.coleta.controller;
 
 import com.lucasbandeira.coleta.model.Coleta;
+import com.lucasbandeira.coleta.model.dto.AdicaoNovoPagamentoDTO;
 import com.lucasbandeira.coleta.model.dto.ColetaDTO;
 import com.lucasbandeira.coleta.model.mapper.ColetaMapper;
 import com.lucasbandeira.coleta.service.ColetaService;
@@ -32,5 +33,13 @@ public class ColetaController {
         Coleta novaColeta = coletaService.criarColeta(coleta);
         URI location = uriLocation(coleta);
         return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/pagamentos")
+    ResponseEntity<Void>adicionarNovoPagamento( @RequestBody AdicaoNovoPagamentoDTO adicaoNovoPagamentoDTO ){
+        coletaService.adicionarNovoPagamento(adicaoNovoPagamentoDTO.codigoPedido(),
+                adicaoNovoPagamentoDTO.dadosCartao(), adicaoNovoPagamentoDTO.tipoPagamento());
+
+        return  ResponseEntity.noContent().build();
     }
 }

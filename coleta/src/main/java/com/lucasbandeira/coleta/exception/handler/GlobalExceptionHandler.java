@@ -1,6 +1,7 @@
 package com.lucasbandeira.coleta.exception.handler;
 
 import com.lucasbandeira.coleta.exception.ClienteNaoEncontradoException;
+import com.lucasbandeira.coleta.exception.ColetaNaoEncontradaException;
 import com.lucasbandeira.coleta.exception.ErroResposta;
 import com.lucasbandeira.coleta.exception.ProdutoNaoEncontradoException;
 import feign.FeignException;
@@ -21,6 +22,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProdutoNaoEncontradoException.class)
     public ResponseEntity<ErroResposta>handleProdutoNaoEncontradoException( ProdutoNaoEncontradoException e){
         var erroResposta = new ErroResposta(e.getMensagem(), e.getCampo());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroResposta);
+    }
+
+    @ExceptionHandler(ColetaNaoEncontradaException.class)
+    public ResponseEntity<ErroResposta>handleColetaNaoEncontradaException(ColetaNaoEncontradaException e){
+        var erroResposta = new ErroResposta(e.getMessage(),"codigoColeta");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroResposta);
     }
 

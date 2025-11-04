@@ -2,7 +2,10 @@ package com.lucasbandeira.coleta.service;
 
 import com.lucasbandeira.coleta.client.ServicoBancarioClient;
 import com.lucasbandeira.coleta.enums.StatusExame;
+import com.lucasbandeira.coleta.enums.TipoPagamento;
+import com.lucasbandeira.coleta.exception.ColetaNaoEncontradaException;
 import com.lucasbandeira.coleta.model.Coleta;
+import com.lucasbandeira.coleta.model.DadosPagamento;
 import com.lucasbandeira.coleta.model.ItemColeta;
 import com.lucasbandeira.coleta.repository.ColetaRepository;
 import com.lucasbandeira.coleta.repository.ItemColetaRepository;
@@ -57,8 +60,30 @@ public class ColetaService {
             atualizarStatus(sucesso, observacoes, coleta);
             coletaRepository.save(coleta);
         }, () -> {
-            throw new RuntimeException("Erro generico");
+            throw new ColetaNaoEncontradaException(String.format("Coleta com o código: %d e chave %s não encontrada",codigoColeta,chavePagamento));
         });
 
+    }
+
+    @Transactional
+    public void adicionarNovoPagamento( Long codigo, String dadosCartao, TipoPagamento tipoPagamento ) {
+
+        coletaRepository.findById(codigo).ifPresentOrElse(coleta -> {
+            DadosPagamento dadosPagamento = new DadosPagamento();
+            dadosPagamento.setTipoPagamento(tipoPagamento);
+            dadosPagamento.setDados(dadosCartao);
+
+            coleta.setDadosPagamento(dadosPagamento);
+            coleta.setStatusExame(StatusExame.REALIZADO);
+            coleta.setObservacoes("Novo pagamento realizado, aguardando o processamento");
+
+
+            String novaChavePagamento = servicoBancario.solicitarPagamento(coleta);
+            coleta.setChavePagamento(novaChavePagamento);
+
+            coletaRepository.save(coleta);
+        }, () -> {
+            throw new ColetaNaoEncontradaException(String.format("Coleta com o código: %d não encontrada",codigo));
+        });
     }
 }
