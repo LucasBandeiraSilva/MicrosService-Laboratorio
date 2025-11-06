@@ -24,7 +24,6 @@ public interface ColetaMapper {
     @Named("mapItens")
     default List <ItemColeta> mapItens( List <ItemColetaDTO> dtos ) {
         List <ItemColeta> coletas = dtos.stream().map(ITEM_COLETA_MAPPER::toEntity).toList();
-        System.out.println("coletas: " + coletas);
         return coletas;
     }
 
@@ -34,9 +33,6 @@ public interface ColetaMapper {
         coleta.setDataPedido(LocalDateTime.now());
 
         var total = calcularTotal(coleta);
-
-        System.out.println("valor unitario: " + total);
-        System.out.println("total: " + total);
 
         coleta.setTotal(total);
 

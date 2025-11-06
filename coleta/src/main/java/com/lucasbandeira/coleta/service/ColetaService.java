@@ -52,7 +52,6 @@ public class ColetaService {
     private void realizarPersistencia( Coleta coleta ) {
         coletaRepository.save(coleta);
         List <ItemColeta> itemColetas = itemColetaRepository.saveAll(coleta.getItens());
-        System.out.println("lista itens: " + itemColetas);
     }
 
     public void atualizarStatusPagamento( Long codigoColeta, String chavePagamento, boolean sucesso, String observacoes ) {
