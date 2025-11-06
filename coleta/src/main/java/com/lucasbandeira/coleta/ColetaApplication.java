@@ -13,10 +13,10 @@ public class ColetaApplication {
         SpringApplication.run(ColetaApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner( KafkaTemplate <String, String> kafkaTemplate ) {
-        return args -> kafkaTemplate.send("health_flow.pedidos-pagos", "dados", "Olá Mundo!.");
-
-    }
+//    @Bean
+//    public CommandLineRunner commandLineRunner( KafkaTemplate <String, String> kafkaTemplate ) {
+//        return args -> kafkaTemplate.send("health_flow.pedidos-pagos", "dados", "Olá Mundo!.");
+//
+//    }
 
 }

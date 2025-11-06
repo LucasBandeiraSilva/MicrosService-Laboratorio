@@ -24,4 +24,7 @@ public class ItemColeta {
 
     private BigDecimal valorUnitario;
 
+    @Transient
+    private String nome;
+
 }

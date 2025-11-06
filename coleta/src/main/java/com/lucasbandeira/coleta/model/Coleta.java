@@ -1,5 +1,6 @@
 package com.lucasbandeira.coleta.model;
 
+import com.lucasbandeira.coleta.client.representation.ClienteRepresentation;
 import com.lucasbandeira.coleta.enums.StatusExame;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -42,5 +43,8 @@ public class Coleta {
 
     @Transient
     private DadosPagamento dadosPagamento;
+
+    @Transient
+    private ClienteRepresentation dadosCliente;
 
 }
