@@ -4,13 +4,12 @@ import com.lucasbandeira.coleta.model.Coleta;
 import com.lucasbandeira.coleta.model.dto.AdicaoNovoPagamentoDTO;
 import com.lucasbandeira.coleta.model.dto.ColetaDTO;
 import com.lucasbandeira.coleta.model.mapper.ColetaMapper;
+import com.lucasbandeira.coleta.publisher.DetalheColetaMapper;
+import com.lucasbandeira.coleta.publisher.representation.DetalheColetaRepresentation;
 import com.lucasbandeira.coleta.service.ColetaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -22,6 +21,7 @@ public class ColetaController {
 
     private final ColetaService coletaService;
     private final ColetaMapper mapper;
+    private final DetalheColetaMapper coletaMapper;
 
     private static URI uriLocation( Coleta coleta ) {
         return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(coleta.getId()).toUri();
@@ -36,10 +36,21 @@ public class ColetaController {
     }
 
     @PostMapping("/pagamentos")
-    ResponseEntity<Void>adicionarNovoPagamento( @RequestBody AdicaoNovoPagamentoDTO adicaoNovoPagamentoDTO ){
+    ResponseEntity <Void> adicionarNovoPagamento( @RequestBody AdicaoNovoPagamentoDTO adicaoNovoPagamentoDTO ) {
         coletaService.adicionarNovoPagamento(adicaoNovoPagamentoDTO.codigoPedido(),
                 adicaoNovoPagamentoDTO.dadosCartao(), adicaoNovoPagamentoDTO.tipoPagamento());
 
-        return  ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity <DetalheColetaRepresentation> obterPorId( @PathVariable Long id ) {
+        return coletaService.
+                carregarDadosCompletosPedidos(id)
+                .map(coletaMapper::toRepresentation)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
+
     }
 }

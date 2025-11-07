@@ -1,6 +1,10 @@
 package com.lucasbandeira.coleta.service;
 
+import com.lucasbandeira.coleta.client.ClientesClient;
+import com.lucasbandeira.coleta.client.ProdutosClient;
 import com.lucasbandeira.coleta.client.ServicoBancarioClient;
+import com.lucasbandeira.coleta.client.representation.ClienteRepresentation;
+import com.lucasbandeira.coleta.client.representation.ProdutoRepresentation;
 import com.lucasbandeira.coleta.enums.StatusExame;
 import com.lucasbandeira.coleta.enums.TipoPagamento;
 import com.lucasbandeira.coleta.exception.ColetaNaoEncontradaException;
@@ -12,10 +16,12 @@ import com.lucasbandeira.coleta.repository.ItemColetaRepository;
 import com.lucasbandeira.coleta.validator.ColetaValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +32,9 @@ public class ColetaService {
     private final ColetaRepository coletaRepository;
     private final ColetaValidator validator;
     private final ServicoBancarioClient servicoBancario;
+    private final ClientesClient apiClientes;
+    private final ProdutosClient apiProdutos;
+
 
     private static void atualizarStatus( boolean sucesso, String observacoes, Coleta coleta ) {
         if (sucesso) {
@@ -59,7 +68,7 @@ public class ColetaService {
             atualizarStatus(sucesso, observacoes, coleta);
             coletaRepository.save(coleta);
         }, () -> {
-            throw new ColetaNaoEncontradaException(String.format("Coleta com o código: %d e chave %s não encontrada",codigoColeta,chavePagamento));
+            throw new ColetaNaoEncontradaException(String.format("Coleta com o código: %d e chave %s não encontrada", codigoColeta, chavePagamento));
         });
 
     }
@@ -82,7 +91,36 @@ public class ColetaService {
 
             coletaRepository.save(coleta);
         }, () -> {
-            throw new ColetaNaoEncontradaException(String.format("Coleta com o código: %d não encontrada",codigo));
+            throw new ColetaNaoEncontradaException(String.format("Coleta com o código: %d não encontrada", codigo));
         });
+    }
+
+    public Optional <Coleta> carregarDadosCompletosPedidos( Long id ) {
+        Optional <Coleta> coleta = coletaRepository.findById(id);
+
+        coleta.ifPresent(this::carregarDadosCliente);
+        coleta.ifPresent(this::carregarDadosItensPedido);
+
+        return coleta;
+
+    }
+
+    private void carregarDadosCliente( Coleta coleta ) {
+        Long codigoCliente = coleta.getCodigoCliente();
+        var response = apiClientes.obterDados(codigoCliente);
+        coleta.setDadosCliente(response.getBody());
+    }
+
+    private void carregarDadosItensPedido( Coleta coleta ) {
+        List<ItemColeta> itens = itemColetaRepository.findByColeta(coleta);
+        coleta.setItens(itens);
+        coleta.getItens().forEach(this::carregarDadosProduto);
+    }
+
+    private void carregarDadosProduto(ItemColeta itemColeta){
+        Long codigoProduto = itemColeta.getCodigoProduto();
+        var response = apiProdutos.obterDados(codigoProduto);
+        String nomeProduto = response.getBody().nome();
+        itemColeta.setNome(nomeProduto);
     }
 }

@@ -1,4 +1,4 @@
-package com.lucasbandeira.coleta.publisher.representation.publisher;
+package com.lucasbandeira.coleta.publisher;
 
 import com.lucasbandeira.coleta.model.Coleta;
 import com.lucasbandeira.coleta.publisher.representation.DetalheColetaRepresentation;
@@ -20,5 +20,5 @@ public interface DetalheColetaMapper {
     @Mapping(source = "total",target = "total")
     @Mapping(source = "statusExame",target = "statusExame")
     @Mapping(source = "itens",target = "itens")
-    DetalheColetaRepresentation toEntity( Coleta coleta );
+    DetalheColetaRepresentation toRepresentation( Coleta coleta );
 }
