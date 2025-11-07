@@ -3,20 +3,18 @@ package com.lucasbandeira.coleta.service;
 import com.lucasbandeira.coleta.client.ClientesClient;
 import com.lucasbandeira.coleta.client.ProdutosClient;
 import com.lucasbandeira.coleta.client.ServicoBancarioClient;
-import com.lucasbandeira.coleta.client.representation.ClienteRepresentation;
-import com.lucasbandeira.coleta.client.representation.ProdutoRepresentation;
 import com.lucasbandeira.coleta.enums.StatusExame;
 import com.lucasbandeira.coleta.enums.TipoPagamento;
 import com.lucasbandeira.coleta.exception.ColetaNaoEncontradaException;
 import com.lucasbandeira.coleta.model.Coleta;
 import com.lucasbandeira.coleta.model.DadosPagamento;
 import com.lucasbandeira.coleta.model.ItemColeta;
+import com.lucasbandeira.coleta.publisher.PagamentoPublisher;
 import com.lucasbandeira.coleta.repository.ColetaRepository;
 import com.lucasbandeira.coleta.repository.ItemColetaRepository;
 import com.lucasbandeira.coleta.validator.ColetaValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,16 +32,22 @@ public class ColetaService {
     private final ServicoBancarioClient servicoBancario;
     private final ClientesClient apiClientes;
     private final ProdutosClient apiProdutos;
+    private final PagamentoPublisher pagamentoPublisher;
 
 
-    private static void atualizarStatus( boolean sucesso, String observacoes, Coleta coleta ) {
+    private void atualizarStatus( boolean sucesso, String observacoes, Coleta coleta ) {
         if (sucesso) {
             coleta.setStatusExame(StatusExame.PAGO);
+            carregarDadosCliente(coleta);
+            carregarDadosItensColeta(coleta);
+            pagamentoPublisher.publicar(coleta);
         } else {
             coleta.setStatusExame(StatusExame.ERRO_PAGAMENTO);
             coleta.setObservacoes(observacoes);
         }
     }
+
+
 
     @Transactional
     public Coleta criarColeta( Coleta coleta ) {
@@ -99,7 +103,7 @@ public class ColetaService {
         Optional <Coleta> coleta = coletaRepository.findById(id);
 
         coleta.ifPresent(this::carregarDadosCliente);
-        coleta.ifPresent(this::carregarDadosItensPedido);
+        coleta.ifPresent(this::carregarDadosItensColeta);
 
         return coleta;
 
@@ -111,7 +115,7 @@ public class ColetaService {
         coleta.setDadosCliente(response.getBody());
     }
 
-    private void carregarDadosItensPedido( Coleta coleta ) {
+    private void carregarDadosItensColeta( Coleta coleta ) {
         List<ItemColeta> itens = itemColetaRepository.findByColeta(coleta);
         coleta.setItens(itens);
         coleta.getItens().forEach(this::carregarDadosProduto);
