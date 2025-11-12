@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: msfaturamento
+
+
+server:
+  port: 8084
+
+minio:
+  url: 'http://localhost:9000'
+  access-key: minio-admin
+  secret-key: admin-123
+  bucket-name: healthflow.faturas
