@@ -1,7 +1,17 @@
 spring:
   application:
     name: msfaturamento
+  kafka:
+    bootstrap-servers: 'localhost:29092'
+    consumer:
+      group-id: healthflow-faturamento
+      auto-offset-reset: earliest
 
+healthflow:
+  config:
+    kafka:
+      topics:
+        pedidos-pagos: 'health_flow.pedidos-pagos'
 
 server:
   port: 8084
@@ -11,3 +21,5 @@ minio:
   access-key: minio-admin
   secret-key: admin-123
   bucket-name: healthflow.faturas
+
+
