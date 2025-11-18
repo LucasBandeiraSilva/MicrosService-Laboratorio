@@ -30,6 +30,6 @@ public class ColetaMapper {
                 representation.nome(),
                 representation.valorUnitario(),
                 representation.quantidade(),
-                representation.getTotal());
+                representation.total());
     }
 }

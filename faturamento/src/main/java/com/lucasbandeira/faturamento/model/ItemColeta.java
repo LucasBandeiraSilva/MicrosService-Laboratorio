@@ -1,8 +1,16 @@
 package com.lucasbandeira.faturamento.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.math.BigDecimal;
 
-public record ItemColeta(Long id, String descricao, BigDecimal valorUnitario, Integer quantidade,BigDecimal total) {
-
-
+@Data
+@AllArgsConstructor
+public class ItemColeta {
+    private Long id;
+    private String nome;
+    private BigDecimal valorUnitario;
+    private Integer quantidade;
+    private BigDecimal total;
 }

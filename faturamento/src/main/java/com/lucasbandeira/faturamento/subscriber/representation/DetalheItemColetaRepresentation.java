@@ -6,9 +6,7 @@ public record DetalheItemColetaRepresentation(
         Long codigoProduto,
         String nome,
         Integer quantidade,
-        BigDecimal valorUnitario) {
+        BigDecimal valorUnitario,
+        BigDecimal total) {
 
-    public BigDecimal getTotal(){
-        return valorUnitario.multiply(BigDecimal.valueOf(this.quantidade));
-    }
 }
