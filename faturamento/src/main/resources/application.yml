@@ -12,6 +12,7 @@ healthflow:
     kafka:
       topics:
         pedidos-pagos: 'health_flow.pedidos-pagos'
+        pedidos-faturados: 'health_flow.exames-faturados'
 
 server:
   port: 8084

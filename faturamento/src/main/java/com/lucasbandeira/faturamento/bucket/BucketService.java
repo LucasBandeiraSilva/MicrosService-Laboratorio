@@ -38,7 +38,7 @@ public class BucketService {
                     .method(Method.GET)
                     .bucket(minioProps.getBucketName())
                     .object(file)
-                    .expiry(1, TimeUnit.HOURS)
+                    .expiry(365, TimeUnit.DAYS)
                     .build();
 
             return client.getPresignedObjectUrl(object);
