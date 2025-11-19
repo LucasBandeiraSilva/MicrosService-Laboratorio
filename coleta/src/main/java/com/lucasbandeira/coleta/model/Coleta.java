@@ -36,7 +36,10 @@ public class Coleta {
     @Enumerated(EnumType.STRING)
     private StatusExame statusExame;
 
-    private String urlResultado;
+    @Column(columnDefinition = "TEXT")
+    private String urlNotaFiscal;
+
+    private String codigoAcompanhamento;
 
     @OneToMany(mappedBy = "coleta")
     private List<ItemColeta>itens;

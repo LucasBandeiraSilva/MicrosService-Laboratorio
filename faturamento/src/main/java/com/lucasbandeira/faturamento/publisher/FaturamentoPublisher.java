@@ -1,10 +1,9 @@
 package com.lucasbandeira.faturamento.publisher;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lucasbandeira.faturamento.model.Coleta;
 import com.lucasbandeira.faturamento.publisher.representation.AtualizacaoStatusColeta;
-import com.lucasbandeira.faturamento.publisher.representation.StatusColeta;
+import com.lucasbandeira.faturamento.publisher.representation.StatusExame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,7 @@ public class FaturamentoPublisher {
     private String topico;
 
     public void publicar( Coleta coleta, String urlNotaFiscal ) {
-        var representation = new AtualizacaoStatusColeta(coleta.id(), StatusColeta.EM_ANALISE, urlNotaFiscal);
+        var representation = new AtualizacaoStatusColeta(coleta.id(), StatusExame.EM_ANALISE, urlNotaFiscal);
 
         try {
             String json = mapper.writeValueAsString(representation);

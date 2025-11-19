@@ -16,6 +16,8 @@ public record DetalheColetaRepresentation(
         String dataPedido,
         BigDecimal total,
         StatusExame statusExame,
+        String urlNotaFiscal,
+        String codigoAcompanhamento,
         List<DetalheItemColetaRepresentation> itens
 ) {
 }

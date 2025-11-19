@@ -12,6 +12,11 @@ spring:
     properties:
       hibernate:
         format_sql:true
+  kafka:
+    bootstrap-servers: 'localhost:29092'
+    consumer:
+      group-id: healthflow-atualizacao-coleta
+      auto-offset-reset: earliest
 
 eureka:
   client:
@@ -21,6 +26,7 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value} }
     prefer-ip-address: true
     ip-address: 127.0.0.1
+
 
 server:
   port: 8082

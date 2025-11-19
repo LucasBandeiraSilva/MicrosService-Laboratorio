@@ -20,5 +20,7 @@ public interface DetalheColetaMapper {
     @Mapping(source = "total",target = "total")
     @Mapping(source = "statusExame",target = "statusExame")
     @Mapping(source = "itens",target = "itens")
+    @Mapping(source = "urlNotaFiscal",target = "urlNotaFiscal")
+    @Mapping(source = "codigoAcompanhamento",target = "codigoAcompanhamento")
     DetalheColetaRepresentation toRepresentation( Coleta coleta );
 }

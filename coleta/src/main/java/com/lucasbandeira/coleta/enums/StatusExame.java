@@ -8,6 +8,6 @@ public enum StatusExame {
     EM_ANALISE,
     PRONTO,
     ERRO_PAGAMENTO,
-    CANCELADO
+
 }
 
