@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: msresultados
+  kafka:
+    bootstrap-servers: 'localhost:29092'
+    consumer:
+      group-id: healthflow-resultados
+
+
+healthflow:
+  config:
+    kafka:
+      topics:
+        pedidos-faturados: 'health_flow.pedidos-faturados'
+        pedidos-prontos: 'health_flow.pedidos-prontos'

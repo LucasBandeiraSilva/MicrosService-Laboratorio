@@ -1,10 +1,10 @@
 spring:
   application:
-    name: msfaturamento
+    name: msresultados
   kafka:
     bootstrap-servers: 'localhost:29092'
     consumer:
-      group-id: healthflow-faturamento
+      group-id: healthflow-resultados
       auto-offset-reset: earliest
 
 healthflow:
