@@ -11,5 +11,8 @@ healthflow:
   config:
     kafka:
       topics:
-        pedidos-faturados: 'health_flow.pedidos-faturados'
-        pedidos-prontos: 'health_flow.pedidos-prontos'
+        pedidos-faturados: 'health_flow.exames-faturados'
+        pedidos-prontos: 'health_flow.exames-prontos'
+
+server:
+  port: 8085
