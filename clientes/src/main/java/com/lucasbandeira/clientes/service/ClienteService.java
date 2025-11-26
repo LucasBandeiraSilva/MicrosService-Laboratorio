@@ -21,7 +21,7 @@ public class ClienteService {
     }
 
     public ClienteDTO obterPorId( Long id ) {
-        return repository.findById(id).map(cliente -> mapper.toDTO(cliente))
+        return repository.findById(id).filter(Cliente::isAtivo).map(cliente -> mapper.toDTO(cliente))
                 .orElseThrow(() -> new EntityNotFoundException("Cliente com ID: " + id + " não encontrado"));
     }
 

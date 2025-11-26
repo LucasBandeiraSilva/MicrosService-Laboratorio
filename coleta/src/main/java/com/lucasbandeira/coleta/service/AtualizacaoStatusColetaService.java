@@ -21,8 +21,8 @@ public class AtualizacaoStatusColetaService {
 
         repository.findById(id).ifPresentOrElse(coleta -> {
             coleta.setStatusExame(statusExame);
-            coleta.setUrlNotaFiscal(urlNotaFiscal);
-            coleta.setCodigoAcompanhamento(codigoAcompanhamento);
+            if(urlNotaFiscal != null) coleta.setUrlNotaFiscal(urlNotaFiscal);
+            if (codigoAcompanhamento != null) coleta.setCodigoAcompanhamento(codigoAcompanhamento);
         }, () -> {
             throw new RuntimeException("Pedido não encontrado");
         });

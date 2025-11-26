@@ -24,7 +24,7 @@ public class FaturamentoPublisher {
 
     public void publicar( Coleta coleta, String urlNotaFiscal ) {
         var representation = new AtualizacaoStatusColeta(coleta.id(), StatusExame.EM_ANALISE, urlNotaFiscal);
-
+        log.info("enviado para o topico de pedidos pago: {}", representation);
         try {
             String json = mapper.writeValueAsString(representation);
             kafkaTemplate.send(topico, "dados", json);

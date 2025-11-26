@@ -22,6 +22,8 @@ public class CloudgatewayApplication {
 				.route(route ->route.path("/clientes/**").uri("lb://msclientes"))
 				.route(route -> route.path("/produtos/**").uri("lb://msprodutos"))
 				.route(route -> route.path("/coletas/**").uri("lb://mscoletas"))
+                .route(route -> route.path("/bucket/**").uri("lb://msfaturamento"))
+                .route(route -> route.path("/resultados/**").uri("lb://msresultados"))
 				.build();
 	}
 

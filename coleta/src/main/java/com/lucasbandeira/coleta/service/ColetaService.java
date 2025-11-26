@@ -48,7 +48,6 @@ public class ColetaService {
     }
 
 
-
     @Transactional
     public Coleta criarColeta( Coleta coleta ) {
         validator.validar(coleta);
@@ -116,12 +115,12 @@ public class ColetaService {
     }
 
     private void carregarDadosItensColeta( Coleta coleta ) {
-        List<ItemColeta> itens = itemColetaRepository.findByColeta(coleta);
+        List <ItemColeta> itens = itemColetaRepository.findByColeta(coleta);
         coleta.setItens(itens);
         coleta.getItens().forEach(this::carregarDadosProduto);
     }
 
-    private void carregarDadosProduto(ItemColeta itemColeta){
+    private void carregarDadosProduto( ItemColeta itemColeta ) {
         Long codigoProduto = itemColeta.getCodigoProduto();
         var response = apiProdutos.obterDados(codigoProduto);
         String nomeProduto = response.getBody().nome();
