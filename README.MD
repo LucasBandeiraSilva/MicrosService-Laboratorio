@@ -12,7 +12,7 @@ Prepare-se: **este projeto foi feito para despertar sua curiosidade e vontade de
 
 Abaixo está uma visão geral da arquitetura do ecossistema HealthFlow, incluindo microsserviços, bancos de dados, comunicação via RabbitMQ e fluxo entre os domínios:
 
-![Arquitetura do Projeto](./docs/Diagrama-MsLab)
+![Arquitetura do Projeto](./docs/Diagrama-MsLab.svg)
 
 
 ## 🏗️ Arquitetura Geral
